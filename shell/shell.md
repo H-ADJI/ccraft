@@ -7,14 +7,14 @@ Building a shell in C.
 ### The Core Functionality
 
 1.  **The Read-Eval-Print Loop (REPL):**
-    - Display a prompt like `chell> `.
-    - Read user input from standard input.
-    - Parse the input into cmd - args
-    - Dummy command execution
-    - Handle empty input and comments
+    - [x] Display a prompt like `chell> `.
+    - [x] Read user input from standard input.
+    - [ ] Parse the input into cmd - args
+    - [ ] Dummy command execution
+    - [ ] Handle empty input and comments
 2.  **Command Execution:**
-    - Handle external commands calls
-    - Handle built-in commands (like `exit`)
+    - [ ] Handle external commands calls
+    - [ ] Handle built-in commands (like `exit`)
 
 ### Essential Shell Features
 
