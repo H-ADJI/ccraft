@@ -9,26 +9,27 @@ Building a shell in C.
 1.  **The Read-Eval-Print Loop (REPL):**
     - [x] Display a prompt like `chell> `.
     - [x] Read user input from standard input.
-    - [ ] Parse the input into cmd - args
-    - [ ] Dummy command execution
-    - [ ] Handle empty input and comments
+      - Using getline to read up to a newline character
+      - Using getchar to read each character (more manual)
+    - [x] Parse the input into a list of cmd - args
+      - tokenize using white spaces
 2.  **Command Execution:**
     - [ ] Handle external commands calls
     - [ ] Handle built-in commands (like `exit`)
 
 ### Essential Shell Features
 
-1.  **Parsing Arguments:**
-    - Handle user input tokenization
-2.  **Built-in `cd` Command:**
+3.  **Comments**
+    - [ ] Ignore comments
+4.  **Built-in `cd` Command:**
     - Since calling external cd won't work
-3.  **`PATH` Environment Variable:**
+5.  **`PATH` Environment Variable:**
     - When full executable path is not specified walkthrough PATH directories to find it
-4.  **Basic I/O Redirection (`<`, `>`):**
+6.  **Basic I/O Redirection (`<`, `>`):**
     - Implement standard input redirection (`< filename`) and standard output redirection (`> filename`).
-5.  **Background Processes (`&`):**
+7.  **Background Processes (`&`):**
     - Allow commands to run in the background (e.g., `sleep 5 &`).
-6.  **Pipelines (`|`):**
+8.  **Pipelines (`|`):**
     - Implement command piping (e.g., `ls -l | grep .c`).
 
 ### Phase 3: Advanced Functionality and Robustness
@@ -46,3 +47,9 @@ Building a shell in C.
    - History navigation using arrows
 5. **Error Handling:**
    - Improve error messages (`command not found`, `permission denied`, `syntax error`).
+6. **handle strings**
+   - Handle string user input tokenization
+
+## References
+
+[code crafters github](https://github.com/codecrafters-io/build-your-own-x?tab=readme-ov-file#build-your-own-shell)

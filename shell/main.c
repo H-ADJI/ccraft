@@ -1,6 +1,8 @@
+#include "lib/tokenizer.h"
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <threads.h>
+#include <string.h>
 
 char *read_line() {
   size_t buff_size = 0;
@@ -19,10 +21,15 @@ char *read_line() {
 
 int main(int argc, char *argv[]) {
   char *line;
+  StringArray tokenz;
   do {
     printf("chell >");
     line = read_line();
-    printf("%s\n", line);
+    tokenz = tokenize(line);
+    printf("number of tokenz : %d\n", tokenz.len);
+    for (int i = 0; i < tokenz.len; i++) {
+      printf("%s:%lu\n", tokenz.strings[i], strlen(tokenz.strings[i]));
+    }
 
   } while (1);
 

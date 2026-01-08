@@ -1,0 +1,45 @@
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+  char **strings; // Pointer to the array of string pointers
+  int len;        // Number of actual strings in the array
+} StringArray;
+
+StringArray create_string_arrray(int capacity) {
+  StringArray *arr = malloc(sizeof(StringArray));
+  arr->strings = malloc(capacity * sizeof(char *));
+  arr->len = 0;
+  return *arr;
+}
+StringArray tokenize(char line[]) {
+  StringArray tokenz = create_string_arrray(20);
+  int scaner_start_idx = 0;
+  int scaner_end_idx = 0;
+  char *current_token = NULL;
+  int token_size = 0;
+  int line_length = strlen(line);
+
+  while (scaner_end_idx < line_length) {
+
+    char current_char = line[scaner_end_idx];
+    token_size = scaner_end_idx - scaner_start_idx + 1;
+
+    if (current_char == ' ' || current_char == '\t' || current_char == '\n' ||
+        current_char == '\0') {
+      if (scaner_end_idx > scaner_start_idx) {
+        current_token = malloc((token_size) * sizeof(char));
+        strncpy(current_token, line + sizeof(char) * scaner_start_idx,
+                scaner_end_idx - scaner_start_idx);
+        tokenz.strings[tokenz.len] = current_token;
+        tokenz.len++;
+      }
+      scaner_end_idx++;
+      scaner_start_idx = scaner_end_idx;
+    } else {
+      scaner_end_idx++;
+    }
+  }
+  return tokenz;
+}
