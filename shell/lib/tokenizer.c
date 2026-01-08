@@ -13,6 +13,7 @@ StringArray create_string_arrray(int capacity) {
   arr->len = 0;
   return *arr;
 }
+
 StringArray tokenize(char line[]) {
   StringArray tokenz = create_string_arrray(20);
   int scaner_start_idx = 0;
