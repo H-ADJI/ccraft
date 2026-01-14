@@ -14,7 +14,9 @@ Building a shell in C.
     - [x] Parse the input into a list of cmd - args
       - tokenize using white spaces
 2.  **Command Execution:**
-    - [ ] Handle external commands calls
+    - [x] Handle external commands calls
+      - command execution using fork - execvp
+      - wait for command termination using waitpid
     - [ ] Handle built-in commands (like `exit`)
 
 ### Essential Shell Features

@@ -3,34 +3,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
-char *read_line() {
-  size_t buff_size = 0;
-  char *line = NULL;
-  if (getline(&line, &buff_size, stdin) == -1) {
-    if (feof(stdin)) {
-      printf("\nEOF, bye\n");
-      exit(EXIT_SUCCESS);
-    } else {
-      perror("error reading line");
+void execute_cmd(char *args[]) {
+  pid_t pid = fork();
+  if (pid == 0) {
+    if (execvp(args[0], args) < 0) {
+      perror(args[0]);
       exit(EXIT_FAILURE);
     }
   }
-  return line;
+  waitpid(pid, NULL, 0);
 }
 
 int main(int argc, char *argv[]) {
   char *line;
   StringArray tokenz;
   do {
-    printf("chell >");
+    printf("chell > ");
     line = read_line();
     tokenz = tokenize(line);
-    printf("number of tokenz : %d\n", tokenz.len);
-    for (int i = 0; i < tokenz.len; i++) {
-      printf("%s:%lu\n", tokenz.strings[i], strlen(tokenz.strings[i]));
-    }
-
+    execute_cmd(tokenz.strings);
   } while (1);
 
   if (line) {

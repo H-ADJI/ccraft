@@ -1,4 +1,5 @@
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -7,14 +8,16 @@ typedef struct {
   int len;        // Number of actual strings in the array
 } StringArray;
 
+// TODO: function to free tokenz memory
 StringArray create_string_arrray(int capacity) {
   StringArray *arr = malloc(sizeof(StringArray));
-  arr->strings = malloc(capacity * sizeof(char *));
+  arr->strings = calloc(capacity, sizeof(char *));
   arr->len = 0;
   return *arr;
 }
 
 StringArray tokenize(char line[]) {
+  // TODO: smarter memory alloc
   StringArray tokenz = create_string_arrray(20);
   int scaner_start_idx = 0;
   int scaner_end_idx = 0;
@@ -32,7 +35,7 @@ StringArray tokenize(char line[]) {
       if (scaner_end_idx > scaner_start_idx) {
         current_token = malloc((token_size) * sizeof(char));
         strncpy(current_token, line + sizeof(char) * scaner_start_idx,
-                scaner_end_idx - scaner_start_idx);
+                token_size - 1);
         tokenz.strings[tokenz.len] = current_token;
         tokenz.len++;
       }
@@ -43,4 +46,25 @@ StringArray tokenize(char line[]) {
     }
   }
   return tokenz;
+}
+void print_tokenz(StringArray tokenz) {
+  printf("number of tokenz : %d\n", tokenz.len);
+  for (int i = 0; i < tokenz.len; i++) {
+    printf("%s:%lu\n", tokenz.strings[i], strlen(tokenz.strings[i]));
+  }
+}
+
+char *read_line() {
+  size_t buff_size = 0;
+  char *line = NULL;
+  if (getline(&line, &buff_size, stdin) == -1) {
+    if (feof(stdin)) {
+      printf("\nEOF, bye\n");
+      exit(EXIT_SUCCESS);
+    } else {
+      perror("error reading line");
+      exit(EXIT_FAILURE);
+    }
+  }
+  return line;
 }
