@@ -17,7 +17,10 @@ Building a shell in C.
     - [x] Handle external commands calls
       - command execution using fork - execvp
       - wait for command termination using waitpid
-    - [ ] Handle built-in commands (like `exit`)
+    - [ ] Handle built-in commands (to manage shell process state)
+      - exit
+      - cd
+      - pwd
 
 ### Essential Shell Features
 
