@@ -2,7 +2,6 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -20,16 +19,16 @@ void execute_cmd(char *args[]) {
 
 int main(int argc, char *argv[]) {
   char *line;
-  StringArray *tokenz;
+  StrArray *tokenz;
   do {
     printf("chell > ");
     line = read_line();
     tokenz = tokenize(line);
-    execute_cmd(tokenz->strings);
+    execute_cmd(tokenz->elements);
     if (line) {
       free(line);
     }
-    free_string_array(tokenz);
+    free_StrArray(tokenz);
   } while (1);
 
   return EXIT_SUCCESS;
