@@ -4,6 +4,7 @@ typedef struct {
 } StringArray;
 
 char *read_line() ;
-StringArray create_string_arrray(int capacity) ;
-StringArray tokenize(char line[]) ;
-void print_tokenz(StringArray tokenz) ;
+StringArray *create_string_arrray(int capacity) ;
+StringArray *tokenize(char line[]) ;
+void free_string_array(StringArray *str_array) ;
+void print_tokenz(StringArray *tokenz) ;

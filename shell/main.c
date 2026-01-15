@@ -20,16 +20,17 @@ void execute_cmd(char *args[]) {
 
 int main(int argc, char *argv[]) {
   char *line;
-  StringArray tokenz;
+  StringArray *tokenz;
   do {
     printf("chell > ");
     line = read_line();
     tokenz = tokenize(line);
-    execute_cmd(tokenz.strings);
+    execute_cmd(tokenz->strings);
+    if (line) {
+      free(line);
+    }
+    free_string_array(tokenz);
   } while (1);
 
-  if (line) {
-    free(line);
-  }
   return EXIT_SUCCESS;
 }
