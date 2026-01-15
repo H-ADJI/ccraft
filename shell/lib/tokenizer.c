@@ -8,7 +8,6 @@ typedef struct {
   int len;        // Number of actual strings in the array
 } StringArray;
 
-// TODO: function to free tokenz memory
 StringArray *create_string_arrray(int capacity) {
   StringArray *arr = malloc(sizeof(StringArray));
   arr->strings = calloc(capacity, sizeof(char *));
@@ -31,7 +30,6 @@ void free_string_array(StringArray *str_array) {
 }
 
 StringArray *tokenize(char line[]) {
-  // TODO: smarter memory alloc
   StringArray *tokenz = create_string_arrray(8);
   int scaner_start_idx = 0;
   int scaner_end_idx = 0;
