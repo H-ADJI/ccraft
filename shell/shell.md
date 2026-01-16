@@ -20,7 +20,6 @@ Building a shell in C.
     - [ ] Handle built-in commands (to manage shell process state)
       - exit
       - cd
-      - pwd
 
 ### Essential Shell Features
 
