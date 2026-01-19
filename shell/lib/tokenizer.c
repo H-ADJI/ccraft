@@ -90,7 +90,7 @@ char *read_line() {
   char *line = NULL;
   if (getline(&line, &buff_size, stdin) == -1) {
     if (feof(stdin)) {
-      printf("\nEOF, bye\n");
+      printf("\nExiting shell...\n");
       exit(EXIT_SUCCESS);
     } else {
       perror("error reading line");

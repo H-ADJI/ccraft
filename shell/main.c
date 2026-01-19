@@ -7,11 +7,16 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+void prompt(void) {
+  char *cwd = getcwd(NULL, 0);
+  printf("[%s] - cshell > ", cwd);
+  free(cwd);
+}
 int main(int argc, char *argv[]) {
   char *line;
   StrArray *tokenz;
   do {
-    printf("chell > ");
+    prompt();
     line = read_line();
     tokenz = tokenize(line);
     execute_cmd(tokenz->elements);
