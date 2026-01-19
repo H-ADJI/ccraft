@@ -6,7 +6,21 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-int builtin_cd(char **args) { return 0; }
+int builtin_cd(char **args) {
+  char *target_dir;
+  if (args[1] == NULL) {
+    target_dir = getenv("HOME");
+  } else {
+    target_dir = args[1];
+  }
+  int result = chdir(target_dir);
+
+  if (result == -1) {
+    perror("Cannot change directory");
+    return EXIT_FAILURE;
+  }
+  return EXIT_SUCCESS;
+}
 int builtin_exit(char **args) {
   // Implement any cleanup here before exiting
   printf("Exiting shell...\n");
@@ -23,6 +37,7 @@ typedef struct {
 
 builtin_cmd builtin_commands[] = {
     {"exit", builtin_exit},
+    {"cd", builtin_cd},
 };
 int builtin_cmd_count = sizeof(builtin_commands) / sizeof(builtin_commands[0]);
 
