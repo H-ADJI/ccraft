@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#define DEFAULT_ARRAY_CAPACITY 8
 
 typedef struct {
   char **elements; // Pointer to the array of string pointers
@@ -46,9 +47,18 @@ void free_StrArray(StrArray *str_array) {
     str_array->len = 0;
   }
 }
-
+char *consume_token(char line[], int scaner_start_idx, int scaner_end_idx) {
+  int token_size = scaner_end_idx - scaner_start_idx;
+  if (token_size == 0) {
+    return NULL;
+  }
+  char *current_token = malloc((token_size + 1) * sizeof(char));
+  strncpy(current_token, line + sizeof(char) * scaner_start_idx, token_size);
+  current_token[token_size] = '\0';
+  return current_token;
+}
 StrArray *tokenize(char line[]) {
-  StrArray *tokenz = create_StrArray(1);
+  StrArray *tokenz = create_StrArray(DEFAULT_ARRAY_CAPACITY);
   int scaner_start_idx = 0;
   int scaner_end_idx = 0;
   char *current_token = NULL;
@@ -58,18 +68,22 @@ StrArray *tokenize(char line[]) {
   while (scaner_end_idx < line_length) {
 
     char current_char = line[scaner_end_idx];
-    token_size = scaner_end_idx - scaner_start_idx;
     if (current_char == ' ' || current_char == '\t' || current_char == '\n' ||
         current_char == '\0') {
-      if (scaner_end_idx > scaner_start_idx) {
-        current_token = malloc((token_size + 1) * sizeof(char));
-        strncpy(current_token, line + sizeof(char) * scaner_start_idx,
-                token_size);
-        current_token[token_size] = '\0';
+      current_token = consume_token(line, scaner_start_idx, scaner_end_idx);
+      if (current_token) {
         append(tokenz, current_token);
       }
       scaner_end_idx++;
       scaner_start_idx = scaner_end_idx;
+
+    } else if (current_char == '#') {
+      current_token = consume_token(line, scaner_start_idx, scaner_end_idx);
+      if (current_token) {
+        append(tokenz, current_token);
+      }
+      break;
+
     } else {
       scaner_end_idx++;
     }

@@ -19,7 +19,9 @@ int main(int argc, char *argv[]) {
     prompt();
     line = read_line();
     tokenz = tokenize(line);
-    execute_cmd(tokenz->elements);
+    if (tokenz->len > 0) {
+      execute_cmd(tokenz->elements);
+    }
     if (line) {
       free(line);
     }
