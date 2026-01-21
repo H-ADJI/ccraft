@@ -24,16 +24,12 @@ Building a shell in C.
 ### Essential Shell Features
 
 3.  **Comments**
-    - [ ] Ignore comments
-4.  **Built-in `cd` Command:**
-    - Since calling external cd won't work
-5.  **`PATH` Environment Variable:**
-    - When full executable path is not specified walkthrough PATH directories to find it
-6.  **Basic I/O Redirection (`<`, `>`):**
+    - [x] Ignore comments
+4.  **Basic I/O Redirection (`<`, `>`):**
     - Implement standard input redirection (`< filename`) and standard output redirection (`> filename`).
-7.  **Background Processes (`&`):**
+5.  **Background Processes (`&`):**
     - Allow commands to run in the background (e.g., `sleep 5 &`).
-8.  **Pipelines (`|`):**
+6.  **Pipelines (`|`):**
     - Implement command piping (e.g., `ls -l | grep .c`).
 
 ### Phase 3: Advanced Functionality and Robustness
