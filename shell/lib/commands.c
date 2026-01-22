@@ -1,3 +1,4 @@
+#include "tokenizer.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,7 +52,8 @@ int is_builtin_cmd(char **args) {
   return EXIT_FAILURE;
 }
 
-void execute_cmd(char *args[]) {
+void execute_cmd(Command *cmd) {
+  char **args = cmd->args->elements;
   if (is_builtin_cmd(args) == EXIT_FAILURE) {
     pid_t pid = fork();
     if (pid == 0) {

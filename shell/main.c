@@ -1,4 +1,3 @@
-#include "lib/commands.h"
 #include "lib/tokenizer.h"
 #include <stddef.h>
 #include <stdio.h>
@@ -14,18 +13,16 @@ void prompt(void) {
 }
 int main(int argc, char *argv[]) {
   char *line;
-  StrArray *tokenz;
+  Command *cmd;
   do {
     prompt();
     line = read_line();
-    tokenz = tokenize(line);
-    if (tokenz->len > 0) {
-      execute_cmd(tokenz->elements);
-    }
+    cmd = tokenize(line);
+    execute_cmd(cmd);
     if (line) {
       free(line);
     }
-    free_StrArray(tokenz);
+    free_cmd(cmd);
   } while (1);
 
   return EXIT_SUCCESS;

@@ -6,10 +6,16 @@
 #define DEFAULT_ARRAY_CAPACITY 8
 
 typedef struct {
-  char **elements; // Pointer to the array of string pointers
-  int len;         // Number of actual strings in the array
-  int capacity;    // Max Capacity
+  char **elements;
+  int len;
+  int capacity;
 } StrArray;
+
+typedef struct {
+  StrArray *args;
+  char *input;
+  char *output;
+} Command;
 
 StrArray *create_StrArray(int capacity) {
   StrArray *arr = malloc(sizeof(StrArray));
@@ -38,14 +44,23 @@ void append(StrArray *str_array, char str[]) {
   }
 }
 
-void free_StrArray(StrArray *str_array) {
-  if (str_array->elements) {
-    for (int i = 0; i < str_array->len; i++) {
-      free(str_array->elements[i]);
+void free_cmd(Command *cmd) {
+  StrArray *array = cmd->args;
+  if (array->elements) {
+    for (int i = 0; i < array->len; i++) {
+      free(array->elements[i]);
     }
-    free(str_array->elements);
-    str_array->len = 0;
+    free(array->elements);
+    array->len = 0;
   }
+  free(array);
+  if (cmd->output) {
+    free(cmd->output);
+  }
+  if (cmd->input) {
+    free(cmd->input);
+  }
+  free(cmd);
 }
 char *consume_token(char line[], int scaner_start_idx, int scaner_end_idx) {
   int token_size = scaner_end_idx - scaner_start_idx;
@@ -57,13 +72,18 @@ char *consume_token(char line[], int scaner_start_idx, int scaner_end_idx) {
   current_token[token_size] = '\0';
   return current_token;
 }
-StrArray *tokenize(char line[]) {
+Command *tokenize(char line[]) {
   StrArray *tokenz = create_StrArray(DEFAULT_ARRAY_CAPACITY);
+  Command *cmd = malloc(sizeof(Command));
+  cmd->output = NULL;
+  cmd->input = NULL;
   int scaner_start_idx = 0;
   int scaner_end_idx = 0;
   char *current_token = NULL;
   int token_size = 0;
   int line_length = strlen(line);
+  int input_token = 0;
+  int output_token = 0;
 
   while (scaner_end_idx < line_length) {
 
@@ -71,24 +91,47 @@ StrArray *tokenize(char line[]) {
     if (current_char == ' ' || current_char == '\t' || current_char == '\n' ||
         current_char == '\0') {
       current_token = consume_token(line, scaner_start_idx, scaner_end_idx);
+      // TODO: refactor output / input token consumption since flag stays 1 and
+      // forever for the rest of the loop
       if (current_token) {
-        append(tokenz, current_token);
+        if (output_token) {
+          cmd->output = current_token;
+        } else if (input_token) {
+          cmd->input = current_token;
+        } else {
+          append(tokenz, current_token);
+        }
       }
       scaner_end_idx++;
       scaner_start_idx = scaner_end_idx;
-
+    } else if (current_char == '>') {
+      if (output_token) {
+        // TODO: handle a list of redirection
+        perror("syntax error, only one output redirection allowed");
+        exit(EXIT_FAILURE);
+      }
+      output_token = 1;
+      scaner_end_idx++;
+    } else if (current_char == '<') {
+      if (input_token) {
+        // TODO: handle a list of redirection
+        perror("syntax error, only one input redirection allowed");
+        exit(EXIT_FAILURE);
+      }
+      input_token = 1;
+      scaner_end_idx++;
     } else if (current_char == '#') {
       current_token = consume_token(line, scaner_start_idx, scaner_end_idx);
       if (current_token) {
         append(tokenz, current_token);
       }
       break;
-
     } else {
       scaner_end_idx++;
     }
   }
-  return tokenz;
+  cmd->args = tokenz;
+  return cmd;
 }
 void print_StrArr(StrArray *array) {
   printf("number of elements: %d\n", array->len);

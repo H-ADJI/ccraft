@@ -1,11 +1,18 @@
 typedef struct {
-  char **elements; // Pointer to the array of string pointers
-  int len;        // Number of actual strings in the array
-  int capacity;   // Max Capacity
+  char **elements;
+  int len;
+  int capacity;
 } StrArray;
+
+typedef struct {
+  StrArray *args;
+  char *input;
+  char *output;
+} Command;
 
 char *read_line() ;
 StrArray *create_StrArray(int capacity) ;
-StrArray *tokenize(char line[]) ;
+Command *tokenize(char line[]) ;
 void print_StrArr(StrArray *array) ;
-void free_StrArray(StrArray *str_array) ;
+void free_cmd(Command *cmd) ;
+void execute_cmd(Command *cmd) ;
