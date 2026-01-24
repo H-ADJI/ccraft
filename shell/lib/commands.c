@@ -1,4 +1,4 @@
-#include "tokenizer.h"
+#include "data_structures.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,6 +7,30 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+typedef struct {
+  StrArray *args;
+  char *input;
+  char *output;
+} Command;
+
+void free_cmd(Command *cmd) {
+  StrArray *array = cmd->args;
+  if (array->elements) {
+    for (int i = 0; i < array->len; i++) {
+      free(array->elements[i]);
+    }
+    free(array->elements);
+    array->len = 0;
+  }
+  free(array);
+  if (cmd->output) {
+    free(cmd->output);
+  }
+  if (cmd->input) {
+    free(cmd->input);
+  }
+  free(cmd);
+}
 int builtin_cd(char **args) {
   char *target_dir;
   if (args[1] == NULL) {

@@ -1,3 +1,4 @@
+#include "commands.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,72 +6,6 @@
 #include <unistd.h>
 #define DEFAULT_ARRAY_CAPACITY 8
 
-typedef struct {
-  char **elements;
-  int len;
-  int capacity;
-} StrArray;
-
-typedef struct {
-  StrArray *args;
-  char *input;
-  char *output;
-} Command;
-
-StrArray *create_StrArray(int capacity) {
-  StrArray *arr = malloc(sizeof(StrArray));
-  arr->elements = calloc(capacity, sizeof(char *));
-  arr->len = 0;
-  arr->capacity = capacity;
-  return arr;
-}
-
-void print_StrArr(StrArray *array) {
-  printf("number of elements: %d\n", array->len);
-  printf("capacity of the array : %d\n", array->capacity);
-  for (int i = 0; i < array->len; i++) {
-    printf("%s:%lu  ", array->elements[i], strlen(array->elements[i]));
-  }
-  printf("\n");
-}
-
-void append(StrArray *str_array, char str[]) {
-  if (str_array->len == str_array->capacity) {
-    char **temp_ptr =
-        realloc(str_array->elements, str_array->capacity * 2 * sizeof(char *));
-    if (temp_ptr == NULL) {
-      perror("Capacity Expension failed");
-      exit(EXIT_FAILURE);
-    }
-    str_array->capacity *= 2;
-    str_array->elements = temp_ptr;
-  }
-
-  str_array->elements[str_array->len] = str;
-  str_array->len++;
-  for (int i = str_array->len; i < str_array->capacity; i++) {
-    str_array->elements[i] = NULL;
-  }
-}
-
-void free_cmd(Command *cmd) {
-  StrArray *array = cmd->args;
-  if (array->elements) {
-    for (int i = 0; i < array->len; i++) {
-      free(array->elements[i]);
-    }
-    free(array->elements);
-    array->len = 0;
-  }
-  free(array);
-  if (cmd->output) {
-    free(cmd->output);
-  }
-  if (cmd->input) {
-    free(cmd->input);
-  }
-  free(cmd);
-}
 typedef struct ScannerToken {
   char *token;
   int updated_start_index;
@@ -93,6 +28,22 @@ ScannerToken consume_token(char line[], int scaner_start_index) {
   token.updated_start_index = scaner_end_index;
   return token;
 }
+
+char *read_line() {
+  size_t buff_size = 0;
+  char *line = NULL;
+  if (getline(&line, &buff_size, stdin) == -1) {
+    if (feof(stdin)) {
+      printf("\nExiting shell...\n");
+      exit(EXIT_SUCCESS);
+    } else {
+      perror("error reading line");
+      exit(EXIT_FAILURE);
+    }
+  }
+  return line;
+}
+
 Command *tokenize(char line[]) {
   StrArray *args = create_StrArray(DEFAULT_ARRAY_CAPACITY);
   Command *cmd = malloc(sizeof(Command));
@@ -131,19 +82,4 @@ Command *tokenize(char line[]) {
   }
   cmd->args = args;
   return cmd;
-}
-
-char *read_line() {
-  size_t buff_size = 0;
-  char *line = NULL;
-  if (getline(&line, &buff_size, stdin) == -1) {
-    if (feof(stdin)) {
-      printf("\nExiting shell...\n");
-      exit(EXIT_SUCCESS);
-    } else {
-      perror("error reading line");
-      exit(EXIT_FAILURE);
-    }
-  }
-  return line;
 }
