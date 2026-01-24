@@ -74,6 +74,12 @@
 - **Description:** Extend your interpreter project. Take your simple language and compile it down to a basic intermediate representation (like bytecode) or even simple assembly (e.g., x86-64).
 - **Language:** `Zig`
 
+### 4. Regular Expression Engine
+
+- **Focus Areas:** Compilers & Language Design (lexing, parsing, automata theory), Algorithms (graph traversal, string matching), Data Structures.
+- **Description:** Build a basic regular expression engine that can match simple patterns (e.g., `.` for any character, `*` for zero or more, `?` for zero or one, character sets like `[a-z]`) against a string. This typically involves converting a regex pattern into an NFA (Nondeterministic Finite Automaton) or DFA (Deterministic Finite Automaton) and then simulating it.
+- **Language:** `Rust` or `Zig`
+
 ### Rate Limiter
 
 - **Focus Areas:** Concurrency, Data Structures, Basic Algorithms.
