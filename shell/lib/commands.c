@@ -1,4 +1,5 @@
 #include "data_structures.h"
+#include <fcntl.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,10 +48,9 @@ int builtin_cd(char **args) {
   return EXIT_SUCCESS;
 }
 int builtin_exit(char **args) {
-  // Implement any cleanup here before exiting
+  // TODO: Implement any cleanup here before exiting
   printf("Exiting shell...\n");
   exit(EXIT_SUCCESS);
-  // Unreachable, but good practice to show return type
   return 0;
 }
 typedef int (*builtin_cmd_ptr)(char **args);
@@ -81,6 +81,25 @@ void execute_cmd(Command *cmd) {
   if (is_builtin_cmd(args) == EXIT_FAILURE) {
     pid_t pid = fork();
     if (pid == 0) {
+
+      if (cmd->output) {
+        mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+        int out = open(cmd->output, O_WRONLY | O_CREAT | O_TRUNC, mode);
+        if (out == -1) {
+          perror("Cannot open file for writing");
+          exit(EXIT_FAILURE);
+        }
+        dup2(out, STDOUT_FILENO);
+      }
+      if (cmd->input) {
+        int in = open(cmd->input, O_RDONLY);
+        if (in == -1) {
+          perror("Cannot open file for reading");
+          exit(EXIT_FAILURE);
+        }
+        dup2(in, STDIN_FILENO);
+      }
+
       if (execvp(args[0], args) < 0) {
         perror(args[0]);
         exit(EXIT_FAILURE);

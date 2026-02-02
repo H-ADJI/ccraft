@@ -60,14 +60,12 @@ Command *tokenize(char line[]) {
         current_char == '\0') {
       scaner_index++;
     } else if (current_char == '<') {
-      // TODO: handle list of IO redirct
       scaner_index++;
       token = consume_token(line, scaner_index);
       cmd->input = token.token;
       scaner_index = token.updated_start_index;
 
     } else if (current_char == '>') {
-      // TODO: handle list of IO redirct
       scaner_index++;
       token = consume_token(line, scaner_index);
       cmd->output = token.token;
