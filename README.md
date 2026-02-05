@@ -14,17 +14,17 @@
 - **Description:** Implement your own version of `malloc` and `free` using `sbrk` or `mmap`. Explore different strategies like first-fit, best-fit, or segregated lists.
 - **Language:** `C`
 
-### Grep
-
-- **Focus Areas:** File I/O, String manipulation, Regular Expressions (basic).
-- **Description:** Create a command-line utility that searches for lines matching a pattern in one or more files. Start with simple substring matching, then introduce basic regular expression-like features.
-- **Language:** `Rust`
-
 ### Event Loop / Async Runtime
 
 - **Description:** Implement a single-threaded event loop (reactor) that monitors multiple I/O sources (e.g., network sockets, files) for readiness and dispatches user-defined callbacks or tasks when events occur. Optionally, build an "executor" on top to manage coroutines/futures, demonstrating cooperative multitasking.
 - **Focus Areas:** Operating Systems (I/O multiplexing: `select`/`poll`/`epoll`/`kqueue`, file descriptors), Networking (non-blocking I/O), Concurrency (event-driven programming, cooperative multitasking), Language Design (understanding how `async/await` works under the hood).
 - **Language:** `Python`
+
+### Grep
+
+- **Focus Areas:** File I/O, String manipulation, Regular Expressions (basic).
+- **Description:** Create a command-line utility that searches for lines matching a pattern in one or more files. Start with simple substring matching, then introduce basic regular expression-like features.
+- **Language:** `Rust`
 
 ### Curl
 
